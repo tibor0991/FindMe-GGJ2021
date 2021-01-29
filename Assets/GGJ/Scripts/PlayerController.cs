@@ -1,30 +1,52 @@
+using Cinemachine;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+namespace io.github.tibor0991
 {
-    [SerializeField]
-    private Animator m_Animator;
 
-    void OnEnable()
+    public class PlayerController : MonoBehaviourPun
     {
-        if(m_Animator == null)
+        [SerializeField]
+        private Animator m_Animator;
+
+        public InputActionReference MoveActionReference, JoinOtherActionReference;
+
+        [SerializeField]
+        private bool m_ForceInput = false;
+
+        void Start()
         {
-            m_Animator = GetComponent<Animator>();
+            if (photonView.IsMine || m_ForceInput)
+            {
+                if (m_Animator == null)
+                {
+                    m_Animator = GetComponent<Animator>();
+                }
+
+                MoveActionReference.action.performed += OnMoveInput;
+                //JoinOtherActionReference.action.performed metti qui roba;
+                MoveActionReference.action.Enable();
+            }
         }
-    }
 
+        private Vector3 dir3D;
+        public void OnMoveInput(InputAction.CallbackContext ctx)
+        {
+            var dir = ctx.ReadValue<Vector2>();
+            dir3D = new Vector3(dir.x, 0, dir.y);
+        }
 
-    private Vector3 dir3D;
-    public void OnMoveInput(InputAction.CallbackContext ctx)
-    {
-        var dir = ctx.ReadValue<Vector2>();
-        dir3D = new Vector3(dir.x, 0, dir.y);
-    }
+        private void Update()
+        {
+            if ((!photonView.IsMine && PhotonNetwork.IsConnected) || !m_ForceInput) return;
 
-    private void Update()
-    {
-        m_Animator.SetFloat("Forward", dir3D.magnitude, 0.2f, Time.deltaTime);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir3D, Vector3.up), 100f * Time.deltaTime);
+            m_Animator.SetFloat("Forward", dir3D.magnitude, 0.01f, Time.deltaTime);
+            if (dir3D.magnitude > 0)
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir3D, Vector3.up), 100f * Time.deltaTime);
+            }
+        }
     }
 }
