@@ -2,6 +2,7 @@ using Cinemachine;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 namespace io.github.tibor0991
 {
@@ -16,6 +17,16 @@ namespace io.github.tibor0991
         [SerializeField]
         private bool m_ForceInput = false;
 
+        [SerializeField]
+        private float TurnSpeed = 50f;
+
+        [Header("Shouting")]
+        [SerializeField]
+        private VisualEffect ShoutEffect;
+
+        [SerializeField]
+        private AudioSource ShoutEffectSFX;
+
         void Start()
         {
             if (photonView.IsMine || m_ForceInput)
@@ -28,6 +39,9 @@ namespace io.github.tibor0991
                 MoveActionReference.action.performed += OnMoveInput;
                 //JoinOtherActionReference.action.performed metti qui roba;
                 MoveActionReference.action.Enable();
+
+                JoinOtherActionReference.action.performed += OnJoinAttempt;
+                JoinOtherActionReference.action.Enable();
             }
         }
 
@@ -38,14 +52,28 @@ namespace io.github.tibor0991
             dir3D = new Vector3(dir.x, 0, dir.y);
         }
 
+        public void OnJoinAttempt(InputAction.CallbackContext ctx)
+        {
+            Shout();
+        }
+
+        [PunRPC]
+        public void Shout()
+        {
+            if(photonView.IsMine)
+            {
+                ShoutEffect.Play();
+            }
+        }
+
         private void Update()
         {
             if ((!photonView.IsMine && PhotonNetwork.IsConnected) || !m_ForceInput) return;
 
-            m_Animator.SetFloat("Forward", dir3D.magnitude, 0.01f, Time.deltaTime);
+            m_Animator.SetFloat("Forward", dir3D.magnitude, 0.2f, Time.deltaTime);
             if (dir3D.magnitude > 0)
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir3D, Vector3.up), 100f * Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir3D, Vector3.up), TurnSpeed * Time.deltaTime);
             }
         }
     }

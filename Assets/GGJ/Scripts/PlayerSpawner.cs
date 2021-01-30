@@ -16,7 +16,6 @@ public class PlayerSpawner : MonoBehaviour
     {
         var instance = PhotonNetwork.Instantiate(m_PlayerPrefab.name, Vector3.zero, Quaternion.identity);
         m_PlayerCamera.Follow = instance.transform;
-
     }
 
 }
