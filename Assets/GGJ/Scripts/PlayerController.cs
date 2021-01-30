@@ -1,6 +1,7 @@
 using Cinemachine;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
 
@@ -18,7 +19,7 @@ namespace io.github.tibor0991
         private bool m_ForceInput = false;
 
         [SerializeField]
-        private float TurnSpeed = 50f;
+        private float m_TurnSpeed = 50f;
 
         [Header("Shouting")]
         [SerializeField]
@@ -26,6 +27,12 @@ namespace io.github.tibor0991
 
         [SerializeField]
         private AudioSource ShoutEffectSFX;
+
+        [SerializeField]
+        private NavMeshAgent m_Agent;
+
+        [SerializeField]
+        private Material MasterMaterial, ClientMaterial;
 
         void Start()
         {
@@ -73,7 +80,7 @@ namespace io.github.tibor0991
             m_Animator.SetFloat("Forward", dir3D.magnitude, 0.2f, Time.deltaTime);
             if (dir3D.magnitude > 0)
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir3D, Vector3.up), TurnSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir3D, Vector3.up), m_TurnSpeed * Time.deltaTime);
             }
         }
     }

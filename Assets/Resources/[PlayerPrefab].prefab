@@ -119,6 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8200739190431977091}
   - component: {fileID: 8200739190431977084}
+  - component: {fileID: 3955724346464661704}
   - component: {fileID: 8200739190431977089}
   - component: {fileID: 8200739190431977090}
   m_Layer: 0
@@ -160,9 +161,34 @@ MonoBehaviour:
   MoveActionReference: {fileID: -1870281576421494533, guid: 87cccd475a544ff4488bee42e22cbbd9, type: 3}
   JoinOtherActionReference: {fileID: -7914923707501315361, guid: 87cccd475a544ff4488bee42e22cbbd9, type: 3}
   m_ForceInput: 1
-  TurnSpeed: 50
+  m_TurnSpeed: 50
   ShoutEffect: {fileID: 1415142783}
   ShoutEffectSFX: {fileID: 0}
+  m_Agent: {fileID: 0}
+  MasterMaterial: {fileID: 2100000, guid: 483638554062b914bbbd6ca18e3ba14e, type: 2}
+  ClientMaterial: {fileID: 2100000, guid: 138b4005b3af14f4b8beb0d9550159fd, type: 2}
+--- !u!195 &3955724346464661704
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8200739190431977085}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &8200739190431977089
 MonoBehaviour:
   m_ObjectHideFlags: 0
