@@ -101,8 +101,9 @@ namespace io.github.tibor0991
         {
             if(photonView.IsMine)
             {
-                ShoutEffect.Play();
                 m_HasPressedJoin = true;
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+                PhotonNetwork.RaiseEvent((byte)EventCodes.OnMeetingButtonPressed, photonView.ViewID, raiseEventOptions, SendOptions.SendReliable);    //1 = A player prefab has been instantiated
             }
             Debug.Log("There's a shout");
         }
@@ -143,6 +144,11 @@ namespace io.github.tibor0991
             {
                 m_InMeetingArea = false;
             }
+        }
+
+        public bool IsReadyForMeeting()
+        {
+            return m_InMeetingArea && m_HasPressedJoin;
         }
     }
 }
