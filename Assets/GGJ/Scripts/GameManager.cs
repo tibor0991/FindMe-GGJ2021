@@ -9,7 +9,7 @@ using UnityEngine;
 namespace io.github.tibor0991 {
     public enum EventCodes { OnPlayerPrefabInstance = 1, OnMeetingAreaEntered = 2, OnMeetingButtonPressed = 3};
 
-    public class GameManager : MonoBehaviour, IOnEventCallback
+    public class GameManager : MonoBehaviourPunCallbacks
     {
         public List<PlayerController> players = new List<PlayerController>();
 
@@ -17,18 +17,16 @@ namespace io.github.tibor0991 {
         public AudioClip MeetingButtonPressedSFX;
         public AudioSource GlobalSFX;
 
-        private void OnEnable()
-        {
-            PhotonNetwork.AddCallbackTarget(this);
-        }
+        public AudioClip OnSuccessSFX, OnFailSFX;
 
-        private void OnDisable()
+        private void Start()
         {
-            PhotonNetwork.RemoveCallbackTarget(this);
+            PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
         }
 
         public int MeetingButtonsPressedCounter = 0;
         public bool GameOver = false;
+
         public void OnEvent(EventData photonEvent)
         {
             switch ((EventCodes)photonEvent.Code)
@@ -42,21 +40,31 @@ namespace io.github.tibor0991 {
                     break;
                 case EventCodes.OnMeetingButtonPressed:
                     GlobalSFX.PlayOneShot(MeetingButtonPressedSFX);
-                    MeetingButtonsPressedCounter++;
-                    if (MeetingButtonsPressedCounter == 2 && !GameOver)
-                    {
-                        if (players[0].IsReadyForMeeting() && players[1].IsReadyForMeeting())
-                        {
-                            Debug.Log("WIN!");
-                            
-                        }
-                        else
-                        {
-                            Debug.Log("LOST!");
-                        }
-                        GameOver = true;
-                    }
+                    OnPressedMeetingButton();
                     break;
+            }
+        }
+
+
+        
+        public void OnPressedMeetingButton()
+        {
+            MeetingButtonsPressedCounter++;
+            if (MeetingButtonsPressedCounter == 2 && !GameOver)
+            {
+                if (players[0].IsReadyForMeeting() && players[1].IsReadyForMeeting())
+                {
+                    Debug.Log("WIN!");
+                    GlobalSFX.PlayOneShot(OnSuccessSFX);
+                    players[0].Reveal();
+                    players[1].Reveal();
+                }
+                else
+                {
+                    Debug.Log("LOST!");
+                    GlobalSFX.PlayOneShot(OnFailSFX);
+                }
+                GameOver = true;
             }
         }
     }

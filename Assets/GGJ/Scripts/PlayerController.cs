@@ -99,12 +99,14 @@ namespace io.github.tibor0991
         [PunRPC]
         public void Shout()
         {
-            if(photonView.IsMine)
+            if (photonView.IsMine && !m_HasPressedJoin)
             {
-                m_HasPressedJoin = true;
-                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+                ShoutEffect.Play();
+                
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
                 PhotonNetwork.RaiseEvent((byte)EventCodes.OnMeetingButtonPressed, photonView.ViewID, raiseEventOptions, SendOptions.SendReliable);    //1 = A player prefab has been instantiated
             }
+            m_HasPressedJoin = true;
             Debug.Log("There's a shout");
         }
 
@@ -149,6 +151,12 @@ namespace io.github.tibor0991
         public bool IsReadyForMeeting()
         {
             return m_InMeetingArea && m_HasPressedJoin;
+        }
+
+        [PunRPC]
+        public void Reveal()
+        {
+            playerMesh.enabled = true;
         }
     }
 }
