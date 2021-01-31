@@ -5131,6 +5131,8 @@ MonoBehaviour:
   FootSteps: {fileID: 5016744851877219924}
   m_PlayerSoundboard: {fileID: -5120314651611032377}
   m_OnOtherEnteredMeetingArea: {fileID: 8300000, guid: 12c1dee0ef7ec8a4b88dca0e2b8e9c14, type: 3}
+  m_InMeetingArea: 0
+  m_HasPressedJoin: 0
 --- !u!195 &3955724346464661704
 NavMeshAgent:
   m_ObjectHideFlags: 0

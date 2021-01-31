@@ -44,6 +44,12 @@ namespace io.github.tibor0991
         [SerializeField]
         private AudioClip m_OnOtherEnteredMeetingArea;
 
+        [SerializeField]
+        private bool m_InMeetingArea = false;
+
+        [SerializeField]
+        private bool m_HasPressedJoin = false;
+
         void Start()
         {
             if (photonView.IsMine)
@@ -58,6 +64,9 @@ namespace io.github.tibor0991
 
                 JoinOtherActionReference.action.performed += OnJoinAttempt;
                 JoinOtherActionReference.action.Enable();
+
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+                PhotonNetwork.RaiseEvent((byte)EventCodes.OnPlayerPrefabInstance, photonView.ViewID, raiseEventOptions, SendOptions.SendReliable);    //1 = A player prefab has been instantiated
             }
 
             //Set player color, Red if Master, Gray if client
@@ -68,10 +77,10 @@ namespace io.github.tibor0991
             {
                 FootSteps.Play();
                 playerMesh.enabled = false;
+                
             }
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
-            PhotonNetwork.RaiseEvent(1, photonView.ViewID, raiseEventOptions, SendOptions.SendReliable);    //1 = A player prefab has been instantiated
+
         }
 
         private Vector3 dir3D;
@@ -93,6 +102,7 @@ namespace io.github.tibor0991
             if(photonView.IsMine)
             {
                 ShoutEffect.Play();
+                m_HasPressedJoin = true;
             }
             Debug.Log("There's a shout");
         }
@@ -111,19 +121,27 @@ namespace io.github.tibor0991
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.CompareTag("MeetingArea") && !photonView.IsMine) 
+            if(other.CompareTag("MeetingArea")) 
             {
-                Debug.Log("Something got inside the meeting area");
-                WarnOther();
+                m_InMeetingArea = true;
+                if (photonView.IsMine)
+                {
+                    
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+                    PhotonNetwork.RaiseEvent((byte)EventCodes.OnMeetingAreaEntered, photonView.ViewID, raiseEventOptions, SendOptions.SendReliable);    //1 = A player prefab has been instantiated
+                }
+                else
+                {
+                    Debug.Log("Something got inside the meeting area");
+                }
             }
         }
 
-        [PunRPC]
-        public void WarnOther()
+        private void OnTriggerExit(Collider other)
         {
-            if (photonView.IsMine)
+            if (other.CompareTag("MeetingArea"))
             {
-                m_PlayerSoundboard.PlayOneShot(m_OnOtherEnteredMeetingArea);
+                m_InMeetingArea = false;
             }
         }
     }
