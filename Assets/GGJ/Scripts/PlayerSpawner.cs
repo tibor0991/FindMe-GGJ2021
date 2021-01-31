@@ -24,7 +24,7 @@ namespace io.github.tibor0991
             Vector2 planarRandomSourcePosition = Random.insideUnitCircle * SpawnAreaRadius;
             Vector3 randomSourcePos = new Vector3(planarRandomSourcePosition.x, 0, planarRandomSourcePosition.y);
             NavMeshHit hit;
-            NavMesh.SamplePosition(randomSourcePos, out hit, SpawnAreaRadius, 0);
+            NavMesh.SamplePosition(randomSourcePos, out hit, 1f, NavMesh.AllAreas);
             var instance = PhotonNetwork.Instantiate(m_PlayerPrefab.name, hit.position, Quaternion.identity);
             m_PlayerCamera.Follow = instance.transform;
             OnPlayerInstanced.Invoke(instance);
