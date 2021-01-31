@@ -1,5 +1,8 @@
 using Cinemachine;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -66,6 +69,9 @@ namespace io.github.tibor0991
                 FootSteps.Play();
                 playerMesh.enabled = false;
             }
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+            PhotonNetwork.RaiseEvent(1, photonView.ViewID, raiseEventOptions, SendOptions.SendReliable);    //1 = A player prefab has been instantiated
         }
 
         private Vector3 dir3D;

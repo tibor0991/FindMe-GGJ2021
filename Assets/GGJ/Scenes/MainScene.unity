@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.1
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -1431,6 +1431,7 @@ GameObject:
   - component: {fileID: 1773242428}
   - component: {fileID: 1773242427}
   - component: {fileID: 1773242429}
+  - component: {fileID: 1773242430}
   m_Layer: 0
   m_Name: '[GameManager]'
   m_TagString: Untagged
@@ -1479,6 +1480,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerAreaPrefab: {fileID: 4055104021793285694, guid: 78e34c0cf04965242a830867c9184a3a, type: 3}
+--- !u!114 &1773242430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773242426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b0e89906bd65244ab20dbdcdf9bac6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
 --- !u!1001 &2060329157
 PrefabInstance:
   m_ObjectHideFlags: 0
