@@ -5735,6 +5735,18 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1415142782, guid: e8f19eb4c6b264d45b9e768dcef4d1fd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 214320412576711218, guid: e8f19eb4c6b264d45b9e768dcef4d1fd, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 428622105193599894, guid: e8f19eb4c6b264d45b9e768dcef4d1fd, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8200739190431977084, guid: e8f19eb4c6b264d45b9e768dcef4d1fd, type: 3}
       propertyPath: TurnSpeed
       value: 200
