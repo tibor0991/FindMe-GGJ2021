@@ -4,7 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace io.github.tibor0991 {
     public enum EventCodes { OnPlayerPrefabInstance = 1, OnMeetingAreaEntered = 2, OnMeetingButtonPressed = 3};
@@ -23,6 +23,8 @@ namespace io.github.tibor0991 {
         {
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
         }
+
+        public Bolt.StateMachine UI_SM;
 
         public int MeetingButtonsPressedCounter = 0;
         public bool GameOver = false;
@@ -58,14 +60,26 @@ namespace io.github.tibor0991 {
                     GlobalSFX.PlayOneShot(OnSuccessSFX);
                     players[0].Reveal();
                     players[1].Reveal();
+                    UI_SM.TriggerUnityEvent("OnVictory");
                 }
                 else
                 {
                     Debug.Log("LOST!");
                     GlobalSFX.PlayOneShot(OnFailSFX);
+                    UI_SM.TriggerUnityEvent("OnLoss");
                 }
                 GameOver = true;
             }
+        }
+
+        public void GetBackToMainMenu()
+        {
+            PhotonNetwork.Disconnect();
+        }
+
+        public override void OnDisconnected(DisconnectCause cause)
+        {
+            PhotonNetwork.LoadLevel(0);
         }
     }
 }

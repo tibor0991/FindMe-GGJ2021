@@ -65,7 +65,7 @@ namespace io.github.tibor0991
                 JoinOtherActionReference.action.performed += OnJoinAttempt;
                 JoinOtherActionReference.action.Enable();
 
-                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
                 PhotonNetwork.RaiseEvent((byte)EventCodes.OnPlayerPrefabInstance, photonView.ViewID, raiseEventOptions, SendOptions.SendReliable);    //1 = A player prefab has been instantiated
             }
 
@@ -130,7 +130,7 @@ namespace io.github.tibor0991
                 if (photonView.IsMine)
                 {
                     
-                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
                     PhotonNetwork.RaiseEvent((byte)EventCodes.OnMeetingAreaEntered, photonView.ViewID, raiseEventOptions, SendOptions.SendReliable);    //1 = A player prefab has been instantiated
                 }
                 else
